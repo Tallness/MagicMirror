@@ -227,11 +227,18 @@ Module.register("currentweather",{
 		var now = new Date();
 		var sunrise = new Date(data.sys.sunrise * 1000);
 		var sunset = new Date(data.sys.sunset * 1000);
+		
+		Log.info("Refreshed at: " + moment(now).format());
+		Log.info("Sunset time: " + moment(sunset).format() + 
+			"\nSunrise time: " +  moment(sunrise).format());
 
 		// The moment().format('h') method has a bug on the Raspberry Pi.
 		// So we need to generate the timestring manually.
 		// See issue: https://github.com/MichMich/MagicMirror/issues/181
 		var sunriseSunsetDateObject = (sunrise < now && sunset > now) ? sunset : sunrise;
+		Log.info("Displaying: " + moment(sunriseSunsetDateObject).format() +
+			"\nOutput: " + ((sunrise < now && sunset > now) ? "sunset" : "sunrise"));
+		
 		var timeString = moment(sunriseSunsetDateObject).format('HH:mm');
 		if (this.config.timeFormat !== 24) {
 			//var hours = sunriseSunsetDateObject.getHours() % 12 || 12;
